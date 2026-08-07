@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Shop</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; background: #f4f5f7; }
+    .header { background: #4a00e0; color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { font-size: 22px; }
+    .header-actions { display: flex; gap: 12px; align-items: center; }
+    .header-actions button { background: #ffd700; color: #1a1a2e; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; cursor: pointer; }
+    .badge { background: #ff3b30; color: #fff; border-radius: 50%; padding: 2px 10px; font-size: 13px; margin-left: 4px; }
+    .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
+    .catalog { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+    .product-card { background: #fff; border-radius: 16px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border: 1px solid #eaeef2; }
+    .product-card .name { font-weight: 600; font-size: 15px; min-height: 40px; }
+    .product-card .price { font-weight: 700; font-size: 18px; color: #4a00e0; margin: 6px 0 12px; }
+    .product-card .actions { display: flex; gap: 8px; }
+    .product-card .actions button { flex: 1; padding: 8px 0; border: none; border-radius: 30px; font-weight: 600; font-size: 13px; cursor: pointer; background: #4a00e0; color: #fff; }
+    .product-card .actions button.in-cart { background: #ffd700; color: #1a1a2e; }
+    .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1a1a2e; color: #fff; padding: 12px 28px; border-radius: 40px; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 300; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1>🛍️ Test Shop</h1>
+    <div class="header-actions">
+      <button id="cart-btn">🛒 Корзина <span class="badge" id="cart-count">0</span></button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="catalog" id="catalog"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const API_URL = "http://localhost:3000/api";
+    let cart = {};
+    let products = [];
+
+    async function loadProducts() {
+      const res = await fetch(`${API_URL}/products`);
+      products = await res.json();
+      renderCatalog();
+    }
+
+    function renderCatalog() {
+      const catalog = document.getElementById('catalog');
+      catalog.innerHTML = products.map(p => `
+        <div class="product-card" data-id="${p.id}">
+          <div class="name">${p.name}</div>
+          <div class="price">${Number(p.price).toLocaleString()} ₽</div>
+          <div class="actions">
+            <button class="btn-cart ${cart[p.id] ? 'in-cart' : ''}" data-id="${p.id}">
+              ${cart[p.id] ? '✅ В корзине' : '🛒 В корзину'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.btn-cart').forEach(btn => {
+        btn.addEventListener('click', () => toggleCart(Number(btn.dataset.id)));
+      });
+    }
+
+    async function toggleCart(productId) {
+      const isInCart = cart[productId];
+      const method = isInCart ? 'DELETE' : 'POST';
+      const url = isInCart
+        ? `${API_URL}/cart/1/items/${productId}`
+        : `${API_URL}/cart/1/items`;
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: isInCart ? null : JSON.stringify({ productId, quantity: 1 })
+      });
+
+      if (res.ok) {
+        if (isInCart) {
+          delete cart[productId];
+          showToast('❌ Товар удалён');
+        } else {
+          cart[productId] = 1;
+          showToast('✅ Товар добавлен');
+        }
+        updateCartCount();
+        renderCatalog();
+      }
+    }
+
+    function updateCartCount() {
+      const count = Object.keys(cart).length;
+      document.getElementById('cart-count').textContent = count;
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 1500);
+    }
+
+    document.getElementById('cart-btn').addEventListener('click', async () => {
+      const res = await fetch(`${API_URL}/cart/1`);
+      const data = await res.json();
+      const items = data.items || [];
+      const msg = items.length === 0 ? '🛒 Корзина пуста' : items.map(i => `${i.name} × ${i.quantity} = ${i.subtotal}`).join('\n');
+      alert(msg);
+    });
+
+    loadProducts();
+  </script>
+</body>
+</html>
