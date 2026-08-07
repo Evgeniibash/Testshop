@@ -1,7 +1,4 @@
 name: CI
-- name: Reset database
-  run: |
-    docker compose exec -T db psql -U postgres -c "TRUNCATE cart_items, orders, users, products RESTART IDENTITY CASCADE;"
 
 on:
   push:
@@ -36,9 +33,6 @@ jobs:
       - name: Reset database
         run: |
           docker compose exec -T db psql -U postgres -c "TRUNCATE cart_items, orders, users, products RESTART IDENTITY CASCADE;"
-
-      - name: Wait for site
-        run: sleep 3
 
       - name: Run API tests
         run: |
