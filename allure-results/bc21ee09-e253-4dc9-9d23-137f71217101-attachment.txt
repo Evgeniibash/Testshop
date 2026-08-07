@@ -1,0 +1,5 @@
+⚠️ Ошибка очистки БД: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+
+🔍 Пытаюсь получить несуществующий товар (id=999)...
+✅ Задание 5 завершено

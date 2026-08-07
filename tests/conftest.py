@@ -30,11 +30,9 @@ def clean_database():
         print(f"⚠️ Ошибка очистки БД: {e}")
 
 @pytest.fixture(autouse=True)
-def clean_db(request):
-    """Очищает базу только для API-тестов"""
-    # Проверяем, запущен ли API-тест
-    if "test_api" in request.node.nodeid:
-        clean_database()
+def clean_db():
+    """Очищает базу перед каждым тестом"""
+    clean_database()
     yield
 
 @pytest.fixture

@@ -1,0 +1,7 @@
+⚠️ Ошибка очистки БД: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+
+
+🔍 Задание 7: Логин с правильным паролем
+📡 Статус: 200
+📦 Ответ: {'user': {'id': 1, 'email': 'demo@example.com', 'name': 'Demo User'}}
+✅ Вход выполнен, пользователь получен
