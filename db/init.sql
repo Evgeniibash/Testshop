@@ -58,9 +58,6 @@ CREATE TABLE IF NOT EXISTS order_items (
   price NUMERIC(10,2) NOT NULL
 );
 
--- Очистка таблиц (после создания)
-TRUNCATE TABLE order_items, orders, cart_items, carts, products, categories, users RESTART IDENTITY CASCADE;
-
 -- Вставка категорий
 INSERT INTO categories (name) VALUES
 ('Смартфоны'), ('Ноутбуки'), ('Аксессуары');
