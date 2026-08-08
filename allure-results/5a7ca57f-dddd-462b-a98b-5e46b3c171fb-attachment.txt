@@ -1,8 +1,0 @@
-⚠️ Ошибка очистки БД: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
-
-
-🔍 Задание 20: Пересчёт total
-📦 Ответ: {'items': [{'id': 7, 'product_id': 1, 'name': 'TestPhone X', 'price': '699.99', 'stock': 7, 'quantity': 2, 'subtotal': '1399.98'}, {'id': 8, 'product_id': 4, 'name': 'USB-C Cable', 'price': '19.99', 'stock': 100, 'quantity': 1, 'subtotal': '19.99'}], 'total': 1419.97}
-💰 Ожидаемый total: 1419.97
-💰 Фактический total: 1419.97
-✅ Total пересчитан

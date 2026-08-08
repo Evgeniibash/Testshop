@@ -27,10 +27,10 @@ def clean_database():
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor()
-        cur.execute("TRUNCATE cart_items, orders, users, products RESTART IDENTITY CASCADE;")
+        cur.execute("TRUNCATE cart_items, orders, carts, users RESTART IDENTITY CASCADE;")
         conn.commit()
         conn.close()
-        print("🧹 База данных очищена")
+        print("🧹 База данных очищена (корзина, заказы, пользователи)")
     except Exception as e:
         print(f"⚠️ Ошибка очистки БД: {e}")
 
