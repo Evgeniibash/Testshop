@@ -30,10 +30,14 @@ jobs:
           docker compose up -d --build
           sleep 10
 
-      - name: Reset and init database
+      - name: Copy init.sql to container
+        run: |
+          docker cp db/init.sql test-shop-db-1:/init.sql
+          docker compose exec -T db psql -U shop -d shop -f /init.sql
+
+      - name: Reset database
         run: |
           docker compose exec -T db psql -U shop -d shop -c "TRUNCATE cart_items, orders, carts, users, products, categories RESTART IDENTITY CASCADE;"
-          docker compose exec -T db psql -U shop -d shop -f db/init.sql
 
       - name: Run API tests
         run: |
