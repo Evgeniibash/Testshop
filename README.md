@@ -2,6 +2,16 @@
 
 Небольшой интернет-магазин для практики UI/API/DB-тестирования.
 
+## 📊 Статус CI/CD
+
+[![CI](https://github.com/Evgeniibash/Testshop/actions/workflows/ci.yml/badge.svg)](https://github.com/Evgeniibash/Testshop/actions/workflows/ci.yml)
+
+## 📈 Allure-отчёт
+
+👉 [Allure Report](https://Evgeniibash.github.io/Testshop/)
+
+---
+
 ## Запуск
 
 Требуется Docker + Docker Compose.
@@ -15,24 +25,34 @@
 - Health: http://localhost:3000/api/health
 - PostgreSQL: localhost:5432
 
+---
+
 ## Тестовый пользователь
 
-email: demo@example.com
-password: demo123
-userId: 1
+| Поле | Значение |
+|---|---|
+| email | `demo@example.com` |
+| password | `demo123` |
+| userId | `1` |
+
+---
 
 ## API
 
-GET    /api/products
-GET    /api/products/:id
-POST   /api/auth/register
-POST   /api/auth/login
-GET    /api/cart/:userId
-POST   /api/cart/:userId/items
-PUT    /api/cart/:userId/items/:itemId
-DELETE /api/cart/:userId/items/:itemId
-POST   /api/orders
-GET    /api/orders/:id
+| Метод | URL |
+|---|---|
+| GET | `/api/products` |
+| GET | `/api/products/:id` |
+| POST | `/api/auth/register` |
+| POST | `/api/auth/login` |
+| GET | `/api/cart/:userId` |
+| POST | `/api/cart/:userId/items` |
+| PUT | `/api/cart/:userId/items/:itemId` |
+| DELETE | `/api/cart/:userId/items/:itemId` |
+| POST | `/api/orders` |
+| GET | `/api/orders/:id` |
+
+---
 
 ## Задания для ученика
 
@@ -57,22 +77,30 @@ GET    /api/orders/:id
 19. Проверить SQL-данные напрямую в PostgreSQL.
 20. Написать автоматические UI и API тесты.
 
+---
+
 ## Полезные данные
 
-Товар с stock=0:
-- Budget Phone, id=2
+| Товар | id | stock |
+|---|---|---|
+| Budget Phone | 2 | 0 |
+| USB-C Cable | 4 | 100 |
+| TestBook Pro | 3 | 5 |
 
-Товар с большим stock:
-- USB-C Cable, id=4
-
-Товар с ограниченным stock:
-- TestBook Pro, id=3, stock=5
+---
 
 ## Сброс базы
 
-Чтобы заново выполнить db/init.sql:
+Чтобы заново выполнить `db/init.sql`:
 
     docker compose down -v
     docker compose up -d --build
 
-ВНИМАНИЕ: `down -v` удаляет данные PostgreSQL.
+⚠️ **Внимание:** `down -v` удаляет данные PostgreSQL.
+
+---
+
+## 📬 Контакты
+
+- GitHub: [Evgeniibash](https://github.com/Evgeniibash)
+- Проект: [Testshop](https://github.com/Evgeniibash/Testshop)
