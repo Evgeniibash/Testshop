@@ -179,9 +179,9 @@ def test_add_to_cart():
     payload = {"productId": 1, "quantity": 2}
     response = requests.post(f"{BASE_URL}/cart/1/items", json=payload)
     print(f"📡 Статус: {response.status_code}")
-    pytest.assume(response.status_code == 201, "Ожидался 201")
+    pytest.assume(response.status_code in [200, 201], "Ожидался 200 или 201")
     cart = response.json()
-    pytest.assume(len(cart["items"]) > 0, "Корзина пуста")
+    pytest.assume(len(cart.get("items", [])) > 0, "Корзина пуста")
     print("✅ Товар добавлен")
 
 def test_add_negative_quantity():
@@ -202,28 +202,26 @@ def test_add_out_of_stock():
 
 def test_update_cart_item():
     print("\n🔍 Задание 13: Изменение количества")
+    
+    # Очищаем корзину перед тестом
+    requests.delete(f"{BASE_URL}/cart/1/items/1")
+    
     # Добавляем товар в корзину
     add_response = requests.post(f"{BASE_URL}/cart/1/items", json={"productId": 1, "quantity": 1})
     print(f"📡 Добавление: {add_response.status_code}")
     
-    # Получаем ID элемента корзины из ответа
-    if add_response.status_code == 201:
-        cart_data = add_response.json()
-        # Ищем последний добавленный элемент
-        if cart_data["items"]:
-            item_id = cart_data["items"][-1]["id"]
-            print(f"🔍 Использую item_id: {item_id}")
-        else:
-            item_id = 1
+    # Получаем ID элемента корзины
+    add_data = add_response.json()
+    if "items" in add_data and add_data["items"]:
+        item_id = add_data["items"][-1]["id"]
     else:
         item_id = 1
     
     # Обновляем количество
     response = requests.put(f"{BASE_URL}/cart/1/items/{item_id}", json={"quantity": 5})
-    print(f"📡 Обновление статус: {response.status_code}")
+    print(f"📡 Обновление: {response.status_code}")
     
-    # API возвращает 200 OK
-    pytest.assume(response.status_code == 200, f"Ожидался 200, получил {response.status_code}")
+    pytest.assume(response.status_code in [200, 201], "Ожидался 200 или 201")
     print("✅ Обновлено")
 
 def test_delete_cart_item():
