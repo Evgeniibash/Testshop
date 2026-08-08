@@ -35,10 +35,21 @@ jobs:
           docker compose exec -T db psql -U shop -d shop -c "TRUNCATE cart_items, orders, users, products RESTART IDENTITY CASCADE;"
 
       - name: Run API tests
+        env:
+          DB_HOST: db
+          DB_USER: shop
+          DB_PASSWORD: shop
+          DB_NAME: shop
         run: |
           pytest tests/test_api.py -v --maxfail=5
 
+
       - name: Run UI tests
+        env:
+          DB_HOST: db
+          DB_USER: shop
+          DB_PASSWORD: shop
+          DB_NAME: shop
         run: |
           pytest tests/test_ui.py -v --maxfail=5
 

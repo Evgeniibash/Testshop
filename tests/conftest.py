@@ -36,13 +36,6 @@ def clean_database():
 
 @pytest.fixture(autouse=True)
 def clean_db():
-    """Очищает базу перед каждым тестом"""
-    # Очищаем корзину через API
-    try:
-        requests.delete(f"{BASE_URL}/cart/1/items/1")
-    except:
-        pass
-    # Очищаем базу через SQL
     clean_database()
     yield
 
