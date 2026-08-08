@@ -1,24 +1,29 @@
 import pytest
 import requests
 import psycopg2
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service
-import os
 
 BASE_URL = "http://localhost:3000/api"
 FRONTEND_URL = "http://localhost:8080"
 
+# Настройки БД для локального запуска и для CI
+DB_HOST = os.getenv("DB_HOST", "localhost")
+DB_USER = os.getenv("DB_USER", "shop")
+DB_PASSWORD = os.getenv("DB_PASSWORD", "shop")
+DB_NAME = os.getenv("DB_NAME", "shop")
+
 DB_CONFIG = {
-    "host": "localhost",
-    "database": "postgres",
-    "user": "postgres",
-    "password": "postgres"
+    "host": DB_HOST,
+    "database": DB_NAME,
+    "user": DB_USER,
+    "password": DB_PASSWORD
 }
 
 def clean_database():
-    """Очищает базу данных только для API-тестов"""
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor()
@@ -31,7 +36,6 @@ def clean_database():
 
 @pytest.fixture(autouse=True)
 def clean_db():
-    """Очищает базу перед каждым тестом"""
     clean_database()
     yield
 

@@ -4,3 +4,5 @@ selenium
 allure-pytest
 psycopg2-binary
 webdriver-manager
+pytest-assume
+pytest-html
