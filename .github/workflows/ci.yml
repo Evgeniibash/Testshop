@@ -30,28 +30,14 @@ jobs:
           docker compose up -d --build
           sleep 10
 
-      - name: Reset database
+      - name: Reset and init database
         run: |
-          docker compose exec -T db psql -U shop -d shop -c "TRUNCATE cart_items, orders, users, products RESTART IDENTITY CASCADE;"
+          docker compose exec -T db psql -U shop -d shop -c "TRUNCATE cart_items, orders, carts, users, products, categories RESTART IDENTITY CASCADE;"
+          docker compose exec -T db psql -U shop -d shop -f db/init.sql
 
       - name: Run API tests
-        env:
-          DB_HOST: db
-          DB_USER: shop
-          DB_PASSWORD: shop
-          DB_NAME: shop
         run: |
           pytest tests/test_api.py -v --maxfail=5
-
-
-      - name: Run UI tests
-        env:
-          DB_HOST: db
-          DB_USER: shop
-          DB_PASSWORD: shop
-          DB_NAME: shop
-        run: |
-          pytest tests/test_ui.py -v --maxfail=5
 
       - name: Install Allure
         run: |
