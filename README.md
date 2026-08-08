@@ -30,6 +30,7 @@ PostgreSQL: localhost:5432
 email   demo@example.com
 password    demo123
 userId  1
+
 API
 
 Метод   URL
@@ -64,7 +65,7 @@ GET /api/orders/:id
 Проверить несуществующий order ID.
 Проверить пересчёт total.
 Проверить SQL-данные напрямую в PostgreSQL.
-Написать автоматические UI и API тесты.
+Написать автоматические API и UI тесты.
 Полезные данные
 
 Товар   id  stock
