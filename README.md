@@ -30,7 +30,6 @@ PostgreSQL: localhost:5432
 email   demo@example.com
 password    demo123
 userId  1
-
 API
 
 Метод   URL
